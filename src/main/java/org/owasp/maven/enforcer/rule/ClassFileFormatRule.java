@@ -50,7 +50,7 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 /**
  * @author Jeremy Long
  */
-public class BytecodeLevelRule implements EnforcerRule {
+public class ClassFileFormatRule implements EnforcerRule {
 
     public final static int JAVA_9 = 53; //(0x35 hex)
     public final static int JAVA_8 = 52; //(0x34 hex)
@@ -61,9 +61,8 @@ public class BytecodeLevelRule implements EnforcerRule {
     public final static int JDK_1_3 = 47; //(0x2F hex)
     public final static int JDK_1_2 = 46; //(0x2E hex)
     public final static int JDK_1_1 = 45; //(0x2D hex)
-
     private static final int JAVA_CLASS_HEADER = 0xCAFEBABE;
-    private int supportedJvmByteCodeLevel = JAVA_7;
+    private int supportedClassFileFormat = JAVA_7;
     private boolean excludeScopeTest = true;
     private boolean excludeScopeProvided = true;
     private Log log;
@@ -119,6 +118,11 @@ public class BytecodeLevelRule implements EnforcerRule {
         }
     }
 
+    /**
+     * Determines if the class file format
+     * @param dependency
+     * @return 
+     */
     protected boolean hasInvalidByteCodeLevel(DependencyReference dependency) {
 
         try (FileInputStream fis = new FileInputStream(dependency.getPath());
@@ -135,7 +139,7 @@ public class BytecodeLevelRule implements EnforcerRule {
                     } else {
                         int minor = in.readUnsignedShort();
                         int major = in.readUnsignedShort();
-                        if (major > supportedJvmByteCodeLevel) {
+                        if (major > supportedClassFileFormat) {
                             return true;
                         }
                     }
@@ -264,7 +268,7 @@ public class BytecodeLevelRule implements EnforcerRule {
      * @param a the Maven artifact
      * @return true if the groupId, artifactId, and version match
      */
-    private static boolean artifactsMatch(org.apache.maven.model.Dependency d, Artifact a) {
+    private static boolean artifactsMatch(Dependency d, Artifact a) {
         return (isEqualOrNull(a.getArtifactId(), d.getArtifactId()))
                 && (isEqualOrNull(a.getGroupId(), d.getGroupId()))
                 && (isEqualOrNull(a.getVersion(), d.getVersion()));
@@ -284,8 +288,9 @@ public class BytecodeLevelRule implements EnforcerRule {
     }
 
     /**
-     * @param session
-     * @param remoteRepositories
+     * Builds a Project Building Request.
+     * @param session the Maven session
+     * @param remoteRepositories the remote repository
      * @return Returns a new ProjectBuildingRequest populated from the current
      * session and the current project remote repositories, used to resolve
      * artifacts.
@@ -296,37 +301,49 @@ public class BytecodeLevelRule implements EnforcerRule {
         return buildingRequest;
     }
 
+    /**
+     * Returns <code>false</code> as the results are not cacheable.
+     * @return <code>false</code>
+     */
     @Override
     public boolean isCacheable() {
         return false;
     }
-
+    /**
+     * As the results are not cacheable this returns <code>false</code>.
+     * @param cachedRule the cached rule
+     * @return <code>false</code>
+     */
     @Override
     public boolean isResultValid(EnforcerRule cachedRule) {
         return false;
     }
 
+    /**
+     * Returns the cache id; since we do not have cacheable results this returns <code>null</code>/
+     * @return <code>null</code>
+     */
     @Override
     public String getCacheId() {
         return null;
     }
 
     /**
-     * Set the value of supportedJvmByteCodeLevel.
+     * Set the value of supportedClassFileFormat.
      *
-     * @param supportedJvmByteCodeLevel new value of supportedJvmByteCodeLevel
+     * @param supportedClassFileFormat new value of supportedClassFileFormat
      */
-    public void setSupportedJvmByteCodeLevel(int supportedJvmByteCodeLevel) {
-        this.supportedJvmByteCodeLevel = supportedJvmByteCodeLevel;
+    public void setSupportedClassFileFormat(int supportedClassFileFormat) {
+        this.supportedClassFileFormat = supportedClassFileFormat;
     }
 
     /**
-     * Get the value of supportedJvmByteCodeLevel.
+     * Get the value of supportedClassFileFormat.
      *
-     * @return the value of supportedJvmByteCodeLevel
+     * @return the value of supportedClassFileFormat
      */
-    public int getSupportedJvmByteCodeLevel() {
-        return supportedJvmByteCodeLevel;
+    public int getSupportedClassFileFormat() {
+        return supportedClassFileFormat;
     }
 
     /**

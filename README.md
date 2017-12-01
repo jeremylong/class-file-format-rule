@@ -1,16 +1,16 @@
-[![Build Status](https://travis-ci.org/jeremylong/bytecode-version-rule.svg?branch=master)](https://travis-ci.org/jeremylong/bytecode-version-rule) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+[![Build Status](https://travis-ci.org/jeremylong/class-file-format-rule.svg?branch=master)](https://travis-ci.org/jeremylong/class-file-format-rule) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-bytecode-version-rule
+class-file-format-rule
 ================
 
-A maven-enforcer rule that ensures dependencies do not exceed a required bytecode version. In other words, 
+A maven-enforcer rule that ensures dependencies do not exceed the required class file format version. In other words, 
 if your project must support an older version of Java - this rule will ensure your dependencies are able to 
 run in the older JVM.
 
 Usage
 -------------
 To use this plugin simply add the following plugin to your build/plugins section of the pom.xml.
-The valid options for the `supportedJvmByteCodeLevel` is the major version of the class file
+The valid options for the `supportedClassFileFormat` is the major version of the class file format
 as described [here](https://en.wikipedia.org/wiki/Java_class_file#General_layout).
 
 - Java 9 = 53
@@ -25,17 +25,17 @@ as described [here](https://en.wikipedia.org/wiki/Java_class_file#General_layout
     <dependencies>
         <dependency>
             <groupId>org.owasp.enforcer</groupId>
-            <artifactId>bytecode-version-rule</artifactId>
+            <artifactId>class-file-format-rule</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>
     <executions>
         <execution>
-            <id>enforce-bytecodelevel</id>
+            <id>enforce-classfileformat</id>
             <configuration>
                 <rules>
-                    <byteCodeRule implementation="org.owasp.maven.enforcer.rule.BytecodeLevelRule">
-                        <supportedJvmByteCodeLevel>51</supportedJvmByteCodeLevel>
+                    <byteCodeRule implementation="org.owasp.maven.enforcer.rule.ClassFileFormatRule">
+                        <supportedClassFileFormat>51</supportedClassFileFormat>
                         <excludeScopeTest>true</excludeScopeTest>
                         <excludeScopeProvided>true</excludeScopeProvided>
                     </byteCodeRule>

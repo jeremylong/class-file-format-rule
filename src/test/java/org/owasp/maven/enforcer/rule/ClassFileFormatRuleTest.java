@@ -26,7 +26,7 @@ import org.junit.Assume;
  *
  * @author Jeremy Long
  */
-public class BytecodeLevelRuleTest {
+public class ClassFileFormatRuleTest {
 
 
     /**
@@ -46,12 +46,12 @@ public class BytecodeLevelRuleTest {
     public void testHasInvalidByteCodeLevel() {
         File f = getResourceAsFile(this, "junit-4.12.jar");
         DependencyReference dependency = new  DependencyReference("junit", "junit", "4.12", f, null, null);
-        BytecodeLevelRule instance = new BytecodeLevelRule();
+        ClassFileFormatRule instance = new ClassFileFormatRule();
         boolean expResult = false;
         boolean result = instance.hasInvalidByteCodeLevel(dependency);
         assertEquals(expResult, result);
         
-        instance.setSupportedJvmByteCodeLevel(BytecodeLevelRule.JDK_1_1);
+        instance.setSupportedClassFileFormat(ClassFileFormatRule.JDK_1_1);
         expResult = true;
         result = instance.hasInvalidByteCodeLevel(dependency);
         assertEquals(expResult, result);
@@ -62,7 +62,7 @@ public class BytecodeLevelRuleTest {
      */
     @Test
     public void testIsCacheable() {
-        BytecodeLevelRule instance = new BytecodeLevelRule();
+        ClassFileFormatRule instance = new ClassFileFormatRule();
         boolean expResult = false;
         boolean result = instance.isCacheable();
         assertEquals(expResult, result);
@@ -74,7 +74,7 @@ public class BytecodeLevelRuleTest {
     @Test
     public void testIsResultValid() {
         EnforcerRule cachedRule = null;
-        BytecodeLevelRule instance = new BytecodeLevelRule();
+        ClassFileFormatRule instance = new ClassFileFormatRule();
         boolean expResult = false;
         boolean result = instance.isResultValid(cachedRule);
         assertEquals(expResult, result);
@@ -85,7 +85,7 @@ public class BytecodeLevelRuleTest {
      */
     @Test
     public void testGetCacheId() {
-        BytecodeLevelRule instance = new BytecodeLevelRule();
+        ClassFileFormatRule instance = new ClassFileFormatRule();
         String result = instance.getCacheId();
         assertNull(result);
     }
