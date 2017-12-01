@@ -50,7 +50,20 @@
             </roles>
         </developer>
     </developers>
-    
+    <scm>
+        <connection>scm:git@github.com:jeremylong/bytecode-version-rule.git</connection>
+        <url>https://github.com/jeremylong/bytecode-version-rule</url>
+        <developerConnection>scm:git@github.com:jeremylong/bytecode-version-rule.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/jeremylong/bytecode-version-rule/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>travis-ci</system>
+        <url>https://travis-ci.org/jeremylong/bytecode-version-rule</url>
+    </ciManagement>
     <properties>
         <api.version>3.0.0-M1</api.version>
         <maven.version>3.5.2</maven.version>
