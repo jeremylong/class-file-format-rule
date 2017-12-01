@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/jeremylong/bytecode-version-rule.svg?branch=master)](https://travis-ci.org/jeremylong/bytecode-version-rule)
+[![Build Status](https://travis-ci.org/jeremylong/bytecode-version-rule.svg?branch=master)](https://travis-ci.org/jeremylong/bytecode-version-rule) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 bytecode-version-rule
 ================
