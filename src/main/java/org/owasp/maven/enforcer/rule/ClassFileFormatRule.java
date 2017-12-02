@@ -137,7 +137,7 @@ public class ClassFileFormatRule implements EnforcerRule {
             StringBuilder sb = new StringBuilder();
 
             for (DependencyReference d : dependencies) {
-                final boolean result = hasInvalidByteCodeLevel(d);
+                final boolean result = hasInvalidClassFileFormat(d);
                 failBuild |= result;
                 if (result) {
                     sb.append(String.format("%n%s:%s:%s", d.getGroupId(), d.getArtifactId(), d.getVersion()));
@@ -161,7 +161,7 @@ public class ClassFileFormatRule implements EnforcerRule {
             }
 
             if (failBuild) {
-                sb.insert(0, "The following dependencies exceed the maximum supported JVM byte code level:");
+                sb.insert(0, "The following dependencies exceed the maximum supported JVM class file format (i.e. they were compiled for a newer JVM then this project supports):");
                 throw new EnforcerRuleException(sb.toString());
             }
 
@@ -179,7 +179,7 @@ public class ClassFileFormatRule implements EnforcerRule {
      * @param dependency the dependency to test
      * @return true if the class file format is greater then expected
      */
-    protected boolean hasInvalidByteCodeLevel(final DependencyReference dependency) {
+    protected boolean hasInvalidClassFileFormat(final DependencyReference dependency) {
 
         try (FileInputStream fis = new FileInputStream(dependency.getPath());
                 BufferedInputStream bis = new BufferedInputStream(fis);

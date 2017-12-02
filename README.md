@@ -24,7 +24,7 @@ as described [here](https://en.wikipedia.org/wiki/Java_class_file#General_layout
     <version>3.0.0-M1</version>
     <dependencies>
         <dependency>
-            <groupId>org.owasp.enforcer</groupId>
+            <groupId>org.owasp.maven.enforcer</groupId>
             <artifactId>class-file-format-rule</artifactId>
             <version>1.0.0</version>
         </dependency>

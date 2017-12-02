@@ -48,12 +48,12 @@ public class ClassFileFormatRuleTest {
         DependencyReference dependency = new  DependencyReference("junit", "junit", "4.12", f, null, null);
         ClassFileFormatRule instance = new ClassFileFormatRule();
         boolean expResult = false;
-        boolean result = instance.hasInvalidByteCodeLevel(dependency);
+        boolean result = instance.hasInvalidClassFileFormat(dependency);
         assertEquals(expResult, result);
         
         instance.setSupportedClassFileFormat(ClassFileFormatRule.JDK_1_1);
         expResult = true;
-        result = instance.hasInvalidByteCodeLevel(dependency);
+        result = instance.hasInvalidClassFileFormat(dependency);
         assertEquals(expResult, result);
     }
 
