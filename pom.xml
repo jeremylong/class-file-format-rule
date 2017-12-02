@@ -65,6 +65,8 @@
         <url>https://travis-ci.org/jeremylong/class-file-format-rule</url>
     </ciManagement>
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <api.version>3.0.0-M1</api.version>
         <maven.version>3.5.2</maven.version>
         <maven.project.version>2.2.1</maven.project.version>

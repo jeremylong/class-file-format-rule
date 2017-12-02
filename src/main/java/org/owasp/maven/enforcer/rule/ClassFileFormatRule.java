@@ -48,27 +48,81 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluatio
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 /**
+ * A maven enforcer rule to validate that the dependencies of a project use a
+ * specific class file format or lower. This ensures that your dependencies will
+ * work on a specific JVM.
+ *
  * @author Jeremy Long
  */
 public class ClassFileFormatRule implements EnforcerRule {
 
-    public final static int JAVA_9 = 53; //(0x35 hex)
-    public final static int JAVA_8 = 52; //(0x34 hex)
-    public final static int JAVA_7 = 51; //(0x33 hex)
-    public final static int JAVA_6 = 50; //(0x32 hex)
-    public final static int JAVA_5 = 49; //(0x31 hex)
-    public final static int JDK_1_4 = 48; //(0x30 hex)
-    public final static int JDK_1_3 = 47; //(0x2F hex)
-    public final static int JDK_1_2 = 46; //(0x2E hex)
-    public final static int JDK_1_1 = 45; //(0x2D hex)
+    /**
+     * Class file format for Java 9.
+     */
+    public static final int JAVA_9 = 53; //(0x35 hex)
+    /**
+     * Class file format for Java 8.
+     */
+    public static final int JAVA_8 = 52; //(0x34 hex)
+    /**
+     * Class file format for Java 7.
+     */
+    public static final int JAVA_7 = 51; //(0x33 hex)
+    /**
+     * Class file format for Java 6.
+     */
+    public static final int JAVA_6 = 50; //(0x32 hex)
+    /**
+     * Class file format for Java 5.
+     */
+    public static final int JAVA_5 = 49; //(0x31 hex)
+    /**
+     * Class file format for Java 4.
+     */
+    public static final int JDK_1_4 = 48; //(0x30 hex)
+    /**
+     * Class file format for Java 3.
+     */
+    public static final int JDK_1_3 = 47; //(0x2F hex)
+    /**
+     * Class file format for Java 2.
+     */
+    public static final int JDK_1_2 = 46; //(0x2E hex)
+    /**
+     * Class file format for Java 1.
+     */
+    public static final int JDK_1_1 = 45; //(0x2D hex)
+    /**
+     * The java class file header.
+     */
     private static final int JAVA_CLASS_HEADER = 0xCAFEBABE;
+    /**
+     * The supported class file format; defaults to Java 7.
+     */
     private int supportedClassFileFormat = JAVA_7;
+    /**
+     * Whether or not to exclude the test scope.
+     */
     private boolean excludeScopeTest = true;
+    /**
+     * Whether or not to exclude the provided scope.
+     */
     private boolean excludeScopeProvided = true;
+    /**
+     * The logger.
+     */
     private Log log;
 
+    /**
+     * Executes the class file format rule. Examines the class files contained
+     * in the projects dependency tree.
+     *
+     * @param helper the enforcer rule helper
+     * @throws EnforcerRuleException thrown if a class file is identified that
+     * has a newer format then expected
+     */
     @Override
-    public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+    public void execute(final EnforcerRuleHelper helper) throws EnforcerRuleException {
         log = helper.getLog();
         try {
             MavenProject project = (MavenProject) helper.evaluate("${project}");
@@ -76,7 +130,7 @@ public class ClassFileFormatRule implements EnforcerRule {
             MavenSession session = (MavenSession) helper.evaluate("${session}");
             List<ArtifactRepository> remoteRepositories = (List<ArtifactRepository>) helper.evaluate("${project.remoteArtifactRepositories}");
             ArtifactResolver artifactResolver = (ArtifactResolver) helper.getComponent(ArtifactResolver.class);
-            DependencyGraphBuilder dependencyGraphBuilder = (DependencyGraphBuilder) helper.getComponent(DependencyGraphBuilder.class); //evaluate("${dependencyGraphBuilder}");            
+            DependencyGraphBuilder dependencyGraphBuilder = (DependencyGraphBuilder) helper.getComponent(DependencyGraphBuilder.class);
 
             Set<DependencyReference> dependencies = getProjectDependencies(project, session, dependencyGraphBuilder, reactorProjects, remoteRepositories, artifactResolver);
             boolean failBuild = false;
@@ -119,11 +173,13 @@ public class ClassFileFormatRule implements EnforcerRule {
     }
 
     /**
-     * Determines if the class file format
-     * @param dependency
-     * @return 
+     * Determines if the class file format. The class files are inspected to
+     * validate the class file format version.
+     *
+     * @param dependency the dependency to test
+     * @return true if the class file format is greater then expected
      */
-    protected boolean hasInvalidByteCodeLevel(DependencyReference dependency) {
+    protected boolean hasInvalidByteCodeLevel(final DependencyReference dependency) {
 
         try (FileInputStream fis = new FileInputStream(dependency.getPath());
                 BufferedInputStream bis = new BufferedInputStream(fis);
@@ -157,12 +213,20 @@ public class ClassFileFormatRule implements EnforcerRule {
      * Scans the project's artifacts and adds them to the engine's dependency
      * list.
      *
-     * @param project the project to scan the dependencies of
-     * @param engine the engine to use to scan the dependencies
+     * @param project the project to scan the dependencies
+     * @param session the maven session
+     * @param dependencyGraphBuilder the maven dependency graph builder
+     * @param reactorProjects the list of maven projects
+     * @param remoteRepositories the list of remote repositories
+     * @param artifactResolver the maven artifact resolver
      * @return a collection of exceptions that may have occurred while resolving
      * and scanning the dependencies
+     * @throws EnforcerRuleException thrown if there is an exception resolving the dependency tree
      */
-    private Set<DependencyReference> getProjectDependencies(MavenProject project, MavenSession session, DependencyGraphBuilder dependencyGraphBuilder, List<MavenProject> reactorProjects, List<ArtifactRepository> remoteRepositories, ArtifactResolver artifactResolver) throws EnforcerRuleException {
+    private Set<DependencyReference> getProjectDependencies(final MavenProject project, final MavenSession session,
+            final DependencyGraphBuilder dependencyGraphBuilder, final List<MavenProject> reactorProjects,
+            final List<ArtifactRepository> remoteRepositories, final ArtifactResolver artifactResolver)
+            throws EnforcerRuleException {
         final Set<DependencyReference> references = new HashSet<>();
         try {
             final DependencyNode dn = dependencyGraphBuilder.buildDependencyGraph(project, null, reactorProjects);
@@ -181,15 +245,17 @@ public class ClassFileFormatRule implements EnforcerRule {
      * Resolves the projects artifacts using Aether and scans the resulting
      * dependencies.
      *
-     * @param engine the core dependency-check engine
+     * @param references the set to which dependencies will be added
      * @param project the project being scanned
      * @param nodes the list of dependency nodes, generally obtained via the
      * DependencyGraphBuilder
      * @param buildingRequest the Maven project building request
+     * @param artifactResolver the maven artifact resolver
      * @return true if the collection of dependencies failed
      */
-    private boolean collectDependencies(Set<DependencyReference> references, MavenProject project, List<DependencyNode> nodes,
-            ProjectBuildingRequest buildingRequest, ArtifactResolver artifactResolver) {
+    private boolean collectDependencies(final Set<DependencyReference> references,
+            final MavenProject project, final List<DependencyNode> nodes,
+            final ProjectBuildingRequest buildingRequest, final ArtifactResolver artifactResolver) {
         boolean collectionFailed = false;
         for (DependencyNode dependencyNode : nodes) {
             if ((excludeScopeTest
@@ -268,7 +334,7 @@ public class ClassFileFormatRule implements EnforcerRule {
      * @param a the Maven artifact
      * @return true if the groupId, artifactId, and version match
      */
-    private static boolean artifactsMatch(Dependency d, Artifact a) {
+    private static boolean artifactsMatch(final Dependency d, final Artifact a) {
         return (isEqualOrNull(a.getArtifactId(), d.getArtifactId()))
                 && (isEqualOrNull(a.getGroupId(), d.getGroupId()))
                 && (isEqualOrNull(a.getVersion(), d.getVersion()));
@@ -283,19 +349,21 @@ public class ClassFileFormatRule implements EnforcerRule {
      * @return true if the strings are equal or if they are both null; otherwise
      * false.
      */
-    private static boolean isEqualOrNull(String left, String right) {
+    private static boolean isEqualOrNull(final String left, final String right) {
         return (left != null && left.equals(right)) || (left == null && right == null);
     }
 
     /**
      * Builds a Project Building Request.
+     *
      * @param session the Maven session
      * @param remoteRepositories the remote repository
      * @return Returns a new ProjectBuildingRequest populated from the current
      * session and the current project remote repositories, used to resolve
      * artifacts.
      */
-    private ProjectBuildingRequest newResolveArtifactProjectBuildingRequest(MavenSession session, List<ArtifactRepository> remoteRepositories) {
+    private ProjectBuildingRequest newResolveArtifactProjectBuildingRequest(final MavenSession session,
+            final List<ArtifactRepository> remoteRepositories) {
         final ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest(session.getProjectBuildingRequest());
         buildingRequest.setRemoteRepositories(remoteRepositories);
         return buildingRequest;
@@ -303,24 +371,29 @@ public class ClassFileFormatRule implements EnforcerRule {
 
     /**
      * Returns <code>false</code> as the results are not cacheable.
+     *
      * @return <code>false</code>
      */
     @Override
     public boolean isCacheable() {
         return false;
     }
+
     /**
      * As the results are not cacheable this returns <code>false</code>.
+     *
      * @param cachedRule the cached rule
      * @return <code>false</code>
      */
     @Override
-    public boolean isResultValid(EnforcerRule cachedRule) {
+    public boolean isResultValid(final EnforcerRule cachedRule) {
         return false;
     }
 
     /**
-     * Returns the cache id; since we do not have cacheable results this returns <code>null</code>/
+     * Returns the cache id; since we do not have cacheable results this returns
+     * <code>null</code>.
+     *
      * @return <code>null</code>
      */
     @Override
@@ -333,7 +406,7 @@ public class ClassFileFormatRule implements EnforcerRule {
      *
      * @param supportedClassFileFormat new value of supportedClassFileFormat
      */
-    public void setSupportedClassFileFormat(int supportedClassFileFormat) {
+    public void setSupportedClassFileFormat(final int supportedClassFileFormat) {
         this.supportedClassFileFormat = supportedClassFileFormat;
     }
 
@@ -351,7 +424,7 @@ public class ClassFileFormatRule implements EnforcerRule {
      *
      * @param excludeScopeTest new value of excludeScopeTest
      */
-    public void setExcludeScopeTest(Boolean excludeScopeTest) {
+    public void setExcludeScopeTest(final boolean excludeScopeTest) {
         this.excludeScopeTest = excludeScopeTest;
     }
 
@@ -360,12 +433,12 @@ public class ClassFileFormatRule implements EnforcerRule {
      *
      * @return the value of excludeScopeTest
      */
-    public Boolean getExcludeScopeTest() {
+    public boolean getExcludeScopeTest() {
         return excludeScopeTest;
     }
 
     /**
-     * Get the value of excludeScopeProvided
+     * Get the value of excludeScopeProvided.
      *
      * @return the value of excludeScopeProvided
      */
@@ -374,12 +447,11 @@ public class ClassFileFormatRule implements EnforcerRule {
     }
 
     /**
-     * Set the value of excludeScopeProvided
+     * Set the value of excludeScopeProvided.
      *
      * @param excludeScopeProvided new value of excludeScopeProvided
      */
     public void setExcludeScopeProvided(boolean excludeScopeProvided) {
         this.excludeScopeProvided = excludeScopeProvided;
     }
-
 }

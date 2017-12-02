@@ -10,8 +10,10 @@ import java.util.List;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 
 /**
+ * The information about a dependency object needed to perform the class file
+ * format validation.
  *
- * @author jeremy
+ * @author Jeremy Long
  */
 public class DependencyReference {
 
@@ -54,7 +56,9 @@ public class DependencyReference {
      * @param availableVersions the available versions for the dependency
      * @param dependencyTrail the trail to the dependency
      */
-    public DependencyReference(String groupId, String artifactId, String version, File path, List<ArtifactVersion> availableVersions, List<String> dependencyTrail) {
+    public DependencyReference(final String groupId, final String artifactId,
+            final String version, final File path, final List<ArtifactVersion> availableVersions,
+            final List<String> dependencyTrail) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
@@ -64,7 +68,7 @@ public class DependencyReference {
     }
 
     /**
-     * Get the value of path
+     * Get the value of path.
      *
      * @return the value of path
      */
@@ -73,16 +77,16 @@ public class DependencyReference {
     }
 
     /**
-     * Set the value of path
+     * Set the value of path.
      *
      * @param path new value of path
      */
-    public void setPath(File path) {
+    public void setPath(final File path) {
         this.path = path;
     }
 
     /**
-     * Get the value of availableVersions
+     * Get the value of availableVersions.
      *
      * @return the value of availableVersions
      */
@@ -91,16 +95,16 @@ public class DependencyReference {
     }
 
     /**
-     * Set the value of availableVersions
+     * Set the value of availableVersions.
      *
      * @param availableVersions new value of availableVersions
      */
-    public void setAvailableVersions(List<ArtifactVersion> availableVersions) {
+    public void setAvailableVersions(final List<ArtifactVersion> availableVersions) {
         this.availableVersions = availableVersions;
     }
 
     /**
-     * Get the value of version
+     * Get the value of version.
      *
      * @return the value of version
      */
@@ -109,16 +113,16 @@ public class DependencyReference {
     }
 
     /**
-     * Set the value of version
+     * Set the value of version.
      *
      * @param version new value of version
      */
-    public void setVersion(String version) {
+    public void setVersion(final String version) {
         this.version = version;
     }
 
     /**
-     * Get the value of artifactId
+     * Get the value of artifactId.
      *
      * @return the value of artifactId
      */
@@ -127,16 +131,16 @@ public class DependencyReference {
     }
 
     /**
-     * Set the value of artifactId
+     * Set the value of artifactId.
      *
      * @param artifactId new value of artifactId
      */
-    public void setArtifactId(String artifactId) {
+    public void setArtifactId(final String artifactId) {
         this.artifactId = artifactId;
     }
 
     /**
-     * Get the value of groupId
+     * Get the value of groupId.
      *
      * @return the value of groupId
      */
@@ -145,16 +149,16 @@ public class DependencyReference {
     }
 
     /**
-     * Set the value of groupId
+     * Set the value of groupId.
      *
      * @param groupId new value of groupId
      */
-    public void setGroupId(String groupId) {
+    public void setGroupId(final String groupId) {
         this.groupId = groupId;
     }
 
     /**
-     * Get the value of dependencyTrail
+     * Get the value of dependencyTrail.
      *
      * @return the value of dependencyTrail
      */
@@ -163,16 +167,22 @@ public class DependencyReference {
     }
 
     /**
-     * Set the value of dependencyTrail
+     * Set the value of dependencyTrail.
      *
      * @param dependencyTrail new value of dependencyTrail
      */
-    public void setDependencyTrail(List<String> dependencyTrail) {
+    public void setDependencyTrail(final List<String> dependencyTrail) {
         this.dependencyTrail = dependencyTrail;
     }
 
+    /**
+     * Standard to string implementation.
+     *
+     * @return a string representation of the object
+     */
     @Override
     public String toString() {
-        return String.format("%s:%s:%s - %s", groupId, artifactId, version, path);
+        return String.format("%s:%s:%s - %s", groupId,
+                artifactId, version, path);
     }
 }
