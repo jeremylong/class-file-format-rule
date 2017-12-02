@@ -29,6 +29,7 @@
         the JVM. In other words, if your project must support an older version of Java - this rule will ensure your dependencies 
         are able to run in the older JVM.</description>
     <inceptionYear>2017</inceptionYear>
+    <url>https://github.com/jeremylong/class-file-format-rule</url>
     <organization>
         <name>OWASP</name>
         <url>http://www.owasp.org</url>
