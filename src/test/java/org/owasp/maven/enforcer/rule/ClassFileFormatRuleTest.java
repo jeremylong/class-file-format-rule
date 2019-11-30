@@ -56,7 +56,19 @@ public class ClassFileFormatRuleTest {
         result = instance.hasInvalidClassFileFormat(dependency);
         assertEquals(expResult, result);
     }
-
+    /**
+     * Test of hasInvalidByteCodeLevel method, of class BytecodeLevelRule.
+     */
+    @Test
+    public void testHasMetaInfVersions() {
+        File f = getResourceAsFile(this, "istack-commons-runtime-3.0.10.jar");
+        DependencyReference dependency = new  DependencyReference("com.sun.istack", "istack-commons-runtime", "3.0.10", f, null, null);
+        ClassFileFormatRule instance = new ClassFileFormatRule();
+        instance.setSupportedClassFileFormat(ClassFileFormatRule.JAVA_8);
+        boolean expResult = false;
+        boolean result = instance.hasInvalidClassFileFormat(dependency);
+        assertEquals(expResult, result);
+    }
     /**
      * Test of isCacheable method, of class BytecodeLevelRule.
      */

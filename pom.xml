@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.owasp.maven.enforcer</groupId>
     <artifactId>class-file-format-rule</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>class-file-format-rule</name>
     <packaging>jar</packaging>
     <description>A maven-enforcer rule that ensures dependencies do not exceed the required class file format required by
@@ -102,8 +102,8 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
                             <includeScope>test</includeScope>
-                            <includeGroupIds>junit</includeGroupIds>
-                            <includeArtifactIds>junit</includeArtifactIds>
+                            <includeGroupIds>junit,com.sun.istack</includeGroupIds>
+                            <includeArtifactIds>junit,istack-commons-runtime</includeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -158,5 +158,12 @@
             <version>${hamcrest-core.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.sun.istack</groupId>
+            <artifactId>istack-commons-runtime</artifactId>
+            <version>3.0.10</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 </project>

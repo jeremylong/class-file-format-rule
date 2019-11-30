@@ -188,7 +188,10 @@ public class ClassFileFormatRule implements EnforcerRule {
 
             JarEntry entry = jarInput.getNextJarEntry();
             while (entry != null) {
-                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                if (!entry.isDirectory() && entry.getName().endsWith(".class")
+                        //skip module info per issue #1
+                        && !entry.getName().endsWith("module-info.class")
+                        && !entry.getName().startsWith("META-INF/versions")) {
                     int magic = in.readInt();
                     if (magic != JAVA_CLASS_HEADER) {
                         log.debug(String.format("%s contains an invalid class", dependency.toString()));
