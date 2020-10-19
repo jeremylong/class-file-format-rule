@@ -44,8 +44,8 @@ public class ClassFileFormatRuleTest {
      */
     @Test
     public void testHasInvalidByteCodeLevel() {
-        File f = getResourceAsFile(this, "junit-4.12.jar");
-        DependencyReference dependency = new  DependencyReference("junit", "junit", "4.12", f, null, null);
+        File f = getResourceAsFile(this, "junit-4.13.1.jar");
+        DependencyReference dependency = new  DependencyReference("junit", "junit", "4.13.1", f, null, null);
         ClassFileFormatRule instance = new ClassFileFormatRule();
         boolean expResult = false;
         boolean result = instance.hasInvalidClassFileFormat(dependency);
