@@ -37,13 +37,13 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.shared.artifact.ArtifactCoordinate;
-import org.apache.maven.shared.artifact.TransferUtils;
-import org.apache.maven.shared.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.artifact.resolve.ArtifactResolverException;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
+import org.apache.maven.shared.transfer.artifact.ArtifactCoordinate;
+import org.apache.maven.shared.transfer.artifact.TransferUtils;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
@@ -126,13 +126,12 @@ public class ClassFileFormatRule implements EnforcerRule {
         log = helper.getLog();
         try {
             MavenProject project = (MavenProject) helper.evaluate("${project}");
-            List<MavenProject> reactorProjects = (List<MavenProject>) helper.evaluate("${reactorProjects}");
             MavenSession session = (MavenSession) helper.evaluate("${session}");
             List<ArtifactRepository> remoteRepositories = (List<ArtifactRepository>) helper.evaluate("${project.remoteArtifactRepositories}");
             ArtifactResolver artifactResolver = (ArtifactResolver) helper.getComponent(ArtifactResolver.class);
             DependencyGraphBuilder dependencyGraphBuilder = (DependencyGraphBuilder) helper.getComponent(DependencyGraphBuilder.class);
 
-            Set<DependencyReference> dependencies = getProjectDependencies(project, session, dependencyGraphBuilder, reactorProjects, remoteRepositories, artifactResolver);
+            Set<DependencyReference> dependencies = getProjectDependencies(project, session, dependencyGraphBuilder, remoteRepositories, artifactResolver);
             boolean failBuild = false;
             StringBuilder sb = new StringBuilder();
 
@@ -219,7 +218,6 @@ public class ClassFileFormatRule implements EnforcerRule {
      * @param project the project to scan the dependencies
      * @param session the maven session
      * @param dependencyGraphBuilder the maven dependency graph builder
-     * @param reactorProjects the list of maven projects
      * @param remoteRepositories the list of remote repositories
      * @param artifactResolver the maven artifact resolver
      * @return a collection of exceptions that may have occurred while resolving
@@ -227,13 +225,14 @@ public class ClassFileFormatRule implements EnforcerRule {
      * @throws EnforcerRuleException thrown if there is an exception resolving the dependency tree
      */
     private Set<DependencyReference> getProjectDependencies(final MavenProject project, final MavenSession session,
-            final DependencyGraphBuilder dependencyGraphBuilder, final List<MavenProject> reactorProjects,
+            final DependencyGraphBuilder dependencyGraphBuilder,
             final List<ArtifactRepository> remoteRepositories, final ArtifactResolver artifactResolver)
             throws EnforcerRuleException {
         final Set<DependencyReference> references = new HashSet<>();
         try {
-            final DependencyNode dn = dependencyGraphBuilder.buildDependencyGraph(project, null, reactorProjects);
             final ProjectBuildingRequest buildingRequest = newResolveArtifactProjectBuildingRequest(session, remoteRepositories);
+            buildingRequest.setProject(project);
+            final DependencyNode dn = dependencyGraphBuilder.buildDependencyGraph(buildingRequest, null);
             if (collectDependencies(references, project, dn.getChildren(), buildingRequest, artifactResolver)) {
                 throw new EnforcerRuleException("Unable to resolve the projects dependencies");
             }
