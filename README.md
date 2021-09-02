@@ -21,12 +21,12 @@ as described [here](https://en.wikipedia.org/wiki/Java_class_file#General_layout
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-enforcer-plugin</artifactId>
-    <version>3.0.0-M1</version>
+    <version>3.0.0</version>
     <dependencies>
         <dependency>
             <groupId>org.owasp.maven.enforcer</groupId>
             <artifactId>class-file-format-rule</artifactId>
-            <version>1.0.0</version>
+            <version>2.0.0</version>
         </dependency>
     </dependencies>
     <executions>
