@@ -69,7 +69,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <api.version>3.0.0</api.version>
-        <maven.version>3.1.0</maven.version>
+        <maven.version>3.8.1</maven.version>
         <maven.project.version>2.2.1</maven.project.version>
         <junit.version>4.13.1</junit.version>
         <hamcrest-core.version>1.3</hamcrest-core.version>
