@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/jeremylong/class-file-format-rule.svg?branch=master)](https://travis-ci.org/jeremylong/class-file-format-rule) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+# DEPRECATED
+
+This project is no longer maintained. A better, maintained alternative exists: [org.codehaus.mojo:extra-enforcer-rules](https://www.mojohaus.org/extra-enforcer-rules/enforceBytecodeVersion.html).
 
 class-file-format-rule
 ================
